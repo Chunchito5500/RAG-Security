@@ -1,0 +1,1 @@
+This module simulates a retrieval monitoring system for secure RAG pipelines. It logs retrieval activity, assigns trust scores to documents, and flags low-trust content to prevent malicious influence on model outputs.
