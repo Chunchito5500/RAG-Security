@@ -1,0 +1,21 @@
+[
+  {
+    "id": "fa193610-c365-4fd7-8896-452719a0433b",
+    "time": "2026-03-25 13:24:13",
+    "query": "financial advice",
+    "results": [
+      {
+        "id": "doc1",
+        "similarity": 0.4,
+        "trust": 0.9,
+        "flagged": false
+      },
+      {
+        "id": "doc2",
+        "similarity": 0.0,
+        "trust": 0.2,
+        "flagged": true
+      }
+    ]
+  }
+]
