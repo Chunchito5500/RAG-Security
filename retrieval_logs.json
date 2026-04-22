@@ -17,5 +17,29 @@
         "flagged": true
       }
     ]
+  },
+  {
+    "request_id": "5b199f2c-936f-4f61-a16e-174890f551a1",
+    "timestamp": "2026-04-22 14:11:37",
+    "query": "financial advice",
+    "top_k": 2,
+    "results": [
+      {
+        "id": "doc1",
+        "similarity": 1.0,
+        "trust_score": 0.91,
+        "status": "ALLOW",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 1.0
+      },
+      {
+        "id": "doc3",
+        "similarity": 0.5,
+        "trust_score": 0.75,
+        "status": "WARN",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 0.44
+      }
+    ]
   }
 ]
