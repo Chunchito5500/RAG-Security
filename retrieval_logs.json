@@ -1,44 +1,223 @@
 [
   {
-    "id": "fa193610-c365-4fd7-8896-452719a0433b",
-    "time": "2026-03-25 13:24:13",
-    "query": "financial advice",
-    "results": [
-      {
-        "id": "doc1",
-        "similarity": 0.4,
-        "trust": 0.9,
-        "flagged": false
-      },
-      {
-        "id": "doc2",
-        "similarity": 0.0,
-        "trust": 0.2,
-        "flagged": true
-      }
-    ]
-  },
-  {
     "request_id": "5b199f2c-936f-4f61-a16e-174890f551a1",
     "timestamp": "2026-04-22 14:11:37",
     "query": "financial advice",
     "top_k": 2,
+    "trust_threshold": 0.5,
+    "filter_low_trust": true,
     "results": [
       {
         "id": "doc1",
         "similarity": 1.0,
         "trust_score": 0.91,
         "status": "ALLOW",
+        "flagged": false,
+        "flag_reason": "Document passed trust checks",
         "high_severity_flag": false,
-        "effective_retrieval_score": 1.0
+        "effective_retrieval_score": 1.0,
+        "filtered_out": false
+      },
+      {
+        "id": "doc2",
+        "similarity": 1.0,
+        "trust_score": 0.4,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
       },
       {
         "id": "doc3",
         "similarity": 0.5,
         "trust_score": 0.75,
         "status": "WARN",
+        "flagged": false,
+        "flag_reason": "Moderate trust score",
         "high_severity_flag": false,
-        "effective_retrieval_score": 0.44
+        "effective_retrieval_score": 0.44,
+        "filtered_out": false
+      },
+      {
+        "id": "doc4",
+        "similarity": 1.0,
+        "trust_score": 0.3,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc5",
+        "similarity": 1.0,
+        "trust_score": 0.24,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc6",
+        "similarity": 1.0,
+        "trust_score": 0.2,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc7",
+        "similarity": 1.0,
+        "trust_score": 0.26,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "Trust score below threshold (0.5)",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      }
+    ],
+    "selected_results": [
+      {
+        "id": "doc1",
+        "similarity": 1.0,
+        "trust_score": 0.91,
+        "status": "ALLOW",
+        "flagged": false,
+        "flag_reason": "Document passed trust checks",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 1.0,
+        "filtered_out": false
+      },
+      {
+        "id": "doc3",
+        "similarity": 0.5,
+        "trust_score": 0.75,
+        "status": "WARN",
+        "flagged": false,
+        "flag_reason": "Moderate trust score",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 0.44,
+        "filtered_out": false
+      }
+    ]
+  },
+  {
+    "request_id": "28e60b56-7e50-4237-a645-24ca97db3804",
+    "timestamp": "2026-09-20 18:22:08",
+    "query": "financial advice",
+    "top_k": 2,
+    "trust_threshold": 0.5,
+    "filter_low_trust": true,
+    "results": [
+      {
+        "id": "doc1",
+        "similarity": 1.0,
+        "trust_score": 0.91,
+        "status": "ALLOW",
+        "flagged": false,
+        "flag_reason": "Document passed trust checks",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 1.0,
+        "filtered_out": false
+      },
+      {
+        "id": "doc2",
+        "similarity": 1.0,
+        "trust_score": 0.4,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc3",
+        "similarity": 0.5,
+        "trust_score": 0.75,
+        "status": "WARN",
+        "flagged": false,
+        "flag_reason": "Moderate trust score",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 0.44,
+        "filtered_out": false
+      },
+      {
+        "id": "doc4",
+        "similarity": 1.0,
+        "trust_score": 0.3,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc5",
+        "similarity": 1.0,
+        "trust_score": 0.24,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc6",
+        "similarity": 1.0,
+        "trust_score": 0.2,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "High-severity prompt injection phrase detected",
+        "high_severity_flag": true,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      },
+      {
+        "id": "doc7",
+        "similarity": 1.0,
+        "trust_score": 0.26,
+        "status": "QUARANTINE",
+        "flagged": true,
+        "flag_reason": "Trust score below threshold (0.5)",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 0.0,
+        "filtered_out": true
+      }
+    ],
+    "selected_results": [
+      {
+        "id": "doc1",
+        "similarity": 1.0,
+        "trust_score": 0.91,
+        "status": "ALLOW",
+        "flagged": false,
+        "flag_reason": "Document passed trust checks",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 1.0,
+        "filtered_out": false
+      },
+      {
+        "id": "doc3",
+        "similarity": 0.5,
+        "trust_score": 0.75,
+        "status": "WARN",
+        "flagged": false,
+        "flag_reason": "Moderate trust score",
+        "high_severity_flag": false,
+        "effective_retrieval_score": 0.44,
+        "filtered_out": false
       }
     ]
   }
