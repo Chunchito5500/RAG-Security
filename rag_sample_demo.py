@@ -6,6 +6,8 @@ from datetime import datetime, timezone
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 from enum import Enum
+from pathlib import Path
+from io import BytesIO
 
 import numpy as np
 
@@ -104,6 +106,9 @@ class ContentRiskScanner:
         (r"\bjailbreak\b",                                          0.25, "HIGH"),
         (r"\bbypass\b",                                             0.25, "HIGH"),
         (r"forget everything",                                      0.25, "HIGH"),
+        (r"\bignore\s+(?:all\s+)?(?:previous|prior)\s+instructions\b", 0.25, "HIGH"),
+        (r"\bwhen\s+summarizing\b[\s\S]{0,150}\balways\s+include\b", 0.25, "HIGH"),
+        (r"\bdo\s+not\s+(?:mention|reveal)\s+(?:that\s+)?(?:this\s+)?instruction\b", 0.25, "HIGH"),
         # HIGH — tool coercion
         (r"(open|fetch|call|send|exfiltrate|run) (url|email|command|api|http)", 0.20, "HIGH"),
         # MEDIUM-HIGH — hidden content
@@ -211,6 +216,28 @@ class TrustScoringEngine:
             flags=flags,
             hard_quarantine=hard_q,
         )
+
+
+# Read actual files without changing the existing text-based ingest() API.
+def read_document(path):
+    path = Path(path)
+    extension = path.suffix.lower()
+    if extension not in (".txt", ".pdf"):
+        raise ValueError("Only TXT and PDF documents are supported")
+    raw = path.read_bytes()
+    if not raw or len(raw) > 10 * 1024 * 1024:
+        raise ValueError("Document is empty or exceeds 10 MB")
+    if extension == ".txt":
+        text = raw.decode("utf-8")
+    else:
+        if not raw.startswith(b"%PDF-"):
+            raise ValueError("Invalid PDF header")
+        from pypdf import PdfReader
+        reader = PdfReader(BytesIO(raw), strict=True)
+        text = "\n".join(page.extract_text() or "" for page in reader.pages)
+    if not text.strip():
+        raise ValueError("Document contains no extractable text")
+    return text
 
 
 # ─────────────────────────────────────────────────────────────

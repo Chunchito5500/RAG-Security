@@ -1,0 +1,157 @@
+{
+  "timestamp": "2026-10-13T01:49:06.341731+00:00",
+  "total_documents": 10,
+  "processed_documents": 10,
+  "expected_documents": 10,
+  "true_positives": 5,
+  "true_negatives": 5,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "accuracy_percent": 100.0,
+  "quarantine_exclusion_passed": true,
+  "exclusion_failures": [],
+  "all_low_trust_test_passed": true,
+  "results": [
+    {
+      "filename": "benign_01.pdf",
+      "document_id": "DOC-AD2A4FE4",
+      "expected": "benign",
+      "trust_score": 0.7525,
+      "decision": "warn",
+      "flagged": false,
+      "warning": true,
+      "flags": [],
+      "status": "processed",
+      "entered_context": true,
+      "correct": true
+    },
+    {
+      "filename": "benign_02.pdf",
+      "document_id": "DOC-B20DFEBF",
+      "expected": "benign",
+      "trust_score": 0.7525,
+      "decision": "warn",
+      "flagged": false,
+      "warning": true,
+      "flags": [],
+      "status": "processed",
+      "entered_context": true,
+      "correct": true
+    },
+    {
+      "filename": "benign_03.pdf",
+      "document_id": "DOC-2D067430",
+      "expected": "benign",
+      "trust_score": 0.7525,
+      "decision": "warn",
+      "flagged": false,
+      "warning": true,
+      "flags": [],
+      "status": "processed",
+      "entered_context": true,
+      "correct": true
+    },
+    {
+      "filename": "benign_04.pdf",
+      "document_id": "DOC-5F677175",
+      "expected": "benign",
+      "trust_score": 0.7525,
+      "decision": "warn",
+      "flagged": false,
+      "warning": true,
+      "flags": [],
+      "status": "processed",
+      "entered_context": true,
+      "correct": true
+    },
+    {
+      "filename": "benign_05.pdf",
+      "document_id": "DOC-E8B3DDAE",
+      "expected": "benign",
+      "trust_score": 0.7525,
+      "decision": "warn",
+      "flagged": false,
+      "warning": true,
+      "flags": [],
+      "status": "processed",
+      "entered_context": true,
+      "correct": true
+    },
+    {
+      "filename": "malicious_01.txt",
+      "document_id": "DOC-476EE794",
+      "expected": "malicious",
+      "trust_score": 0.6425,
+      "decision": "quarantine",
+      "flagged": true,
+      "warning": false,
+      "flags": [
+        "HIGH:\\bignore\\s+(?:all\\s+)?(?:previous|prior)\\s+in"
+      ],
+      "status": "processed",
+      "entered_context": false,
+      "correct": true
+    },
+    {
+      "filename": "malicious_02.pdf",
+      "document_id": "DOC-7D2EB732",
+      "expected": "malicious",
+      "trust_score": 0.7025,
+      "decision": "quarantine",
+      "flagged": true,
+      "warning": false,
+      "flags": [
+        "HIGH:(developer|system) (message|prompt)"
+      ],
+      "status": "processed",
+      "entered_context": false,
+      "correct": true
+    },
+    {
+      "filename": "malicious_03.txt",
+      "document_id": "DOC-EB0C48F9",
+      "expected": "malicious",
+      "trust_score": 0.5925,
+      "decision": "quarantine",
+      "flagged": true,
+      "warning": false,
+      "flags": [
+        "HIGH:\\bwhen\\s+summarizing\\b[\\s\\S]{0,150}\\balways\\s",
+        "HIGH:\\bdo\\s+not\\s+(?:mention|reveal)\\s+(?:that\\s+)"
+      ],
+      "status": "processed",
+      "entered_context": false,
+      "correct": true
+    },
+    {
+      "filename": "malicious_04.pdf",
+      "document_id": "DOC-580D5017",
+      "expected": "malicious",
+      "trust_score": 0.7025,
+      "decision": "quarantine",
+      "flagged": true,
+      "warning": false,
+      "flags": [
+        "HIGH:\\bbypass\\b"
+      ],
+      "status": "processed",
+      "entered_context": false,
+      "correct": true
+    },
+    {
+      "filename": "malicious_05.txt",
+      "document_id": "DOC-CFE21167",
+      "expected": "malicious",
+      "trust_score": 0.6425,
+      "decision": "quarantine",
+      "flagged": true,
+      "warning": false,
+      "flags": [
+        "HIGH:\\bdo\\s+not\\s+(?:mention|reveal)\\s+(?:that\\s+)"
+      ],
+      "status": "processed",
+      "entered_context": false,
+      "correct": true
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+filename,source_url,expected_label
+benign_01.pdf,https://arxiv.org/pdf/2312.10997,benign
+benign_02.pdf,https://arxiv.org/pdf/2402.19473,benign
+benign_03.pdf,https://arxiv.org/pdf/2410.15944,benign
+benign_04.pdf,https://arxiv.org/pdf/2405.07437,benign
+benign_05.pdf,https://arxiv.org/pdf/2402.07630,benign
