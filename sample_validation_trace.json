@@ -1,0 +1,194 @@
+{
+  "generated_at": "2026-10-13 19:27:10",
+  "summary": {
+    "benign_total": 3,
+    "benign_allowed_or_warned": 3,
+    "malicious_total": 3,
+    "malicious_quarantined": 3,
+    "quarantined_in_context": [],
+    "errors": []
+  },
+  "traces": [
+    {
+      "trace_id": "9f4da7d5-6647-4b98-b565-1d01a69c9950",
+      "run_id": "validation-48d1e816-29c7-4297-833f-ffdf316d91dc",
+      "filename": "benign_01.txt",
+      "document_id": "DOC-804F6C70",
+      "expected": "benign",
+      "predicted": "benign",
+      "correct": true,
+      "decision": "warn",
+      "trust_score": 0.6925,
+      "entered_context": true,
+      "reason": "Moderate trust score; downweighted at retrieval",
+      "flags": [],
+      "signals": {
+        "provenance": 0.4,
+        "integrity": 0.85,
+        "validation": 0.7,
+        "content_risk": 0.0
+      },
+      "source": {
+        "found": true,
+        "source_type": "unknown",
+        "file_type": "txt",
+        "content_hash_sha256": "804f6c704f3f3e29c2e1c9ab20e66202a34bbaff536498dc6669c385be7ed08c",
+        "uploader_id": "sprint8-validation",
+        "uploaded_at": "2026-10-13T23:27:10.467189+00:00"
+      },
+      "processing_status": "processed"
+    },
+    {
+      "trace_id": "93a1db4f-8928-4c99-831b-cbc9a6b56931",
+      "run_id": "validation-48d1e816-29c7-4297-833f-ffdf316d91dc",
+      "filename": "benign_02.txt",
+      "document_id": "DOC-A2262172",
+      "expected": "benign",
+      "predicted": "benign",
+      "correct": true,
+      "decision": "warn",
+      "trust_score": 0.6925,
+      "entered_context": true,
+      "reason": "Moderate trust score; downweighted at retrieval",
+      "flags": [],
+      "signals": {
+        "provenance": 0.4,
+        "integrity": 0.85,
+        "validation": 0.7,
+        "content_risk": 0.0
+      },
+      "source": {
+        "found": true,
+        "source_type": "unknown",
+        "file_type": "txt",
+        "content_hash_sha256": "a22621723e4ca6e551c07b2ec6a5b1ec9a5678d579473c871d8fa5f77edef7f4",
+        "uploader_id": "sprint8-validation",
+        "uploaded_at": "2026-10-13T23:27:10.468773+00:00"
+      },
+      "processing_status": "processed"
+    },
+    {
+      "trace_id": "80c6fa14-de6f-4f3f-aee8-6d7905c186e4",
+      "run_id": "validation-48d1e816-29c7-4297-833f-ffdf316d91dc",
+      "filename": "benign_03.txt",
+      "document_id": "DOC-3B07B873",
+      "expected": "benign",
+      "predicted": "benign",
+      "correct": true,
+      "decision": "warn",
+      "trust_score": 0.6925,
+      "entered_context": true,
+      "reason": "Moderate trust score; downweighted at retrieval",
+      "flags": [],
+      "signals": {
+        "provenance": 0.4,
+        "integrity": 0.85,
+        "validation": 0.7,
+        "content_risk": 0.0
+      },
+      "source": {
+        "found": true,
+        "source_type": "unknown",
+        "file_type": "txt",
+        "content_hash_sha256": "3b07b873f7acab1a050f0a425564ed2a13c32e21573a0b1d6b1e3d3619e621cc",
+        "uploader_id": "sprint8-validation",
+        "uploaded_at": "2026-10-13T23:27:10.468906+00:00"
+      },
+      "processing_status": "processed"
+    },
+    {
+      "trace_id": "c2afeb50-5afa-454f-823d-f3fe1b4e15e3",
+      "run_id": "validation-48d1e816-29c7-4297-833f-ffdf316d91dc",
+      "filename": "malicious_01.txt",
+      "document_id": "DOC-3FC72C07",
+      "expected": "malicious",
+      "predicted": "malicious",
+      "correct": true,
+      "decision": "quarantine",
+      "trust_score": 0.6425,
+      "entered_context": false,
+      "reason": "Hard quarantine: 1 high-severity injection pattern(s) matched",
+      "flags": [
+        "HIGH:\\bignore\\s+(?:all\\s+)?(?:previous|prior)\\s+in"
+      ],
+      "signals": {
+        "provenance": 0.4,
+        "integrity": 0.85,
+        "validation": 0.7,
+        "content_risk": 0.25
+      },
+      "source": {
+        "found": true,
+        "source_type": "unknown",
+        "file_type": "txt",
+        "content_hash_sha256": "3fc72c071b2f9230d45c0b75940d2c1cbd645a020028f3cf63d4933bdde3fbcd",
+        "uploader_id": "sprint8-validation",
+        "uploaded_at": "2026-10-13T23:27:10.469060+00:00"
+      },
+      "processing_status": "processed"
+    },
+    {
+      "trace_id": "3d532fc5-d413-4344-80b1-d446225cb88d",
+      "run_id": "validation-48d1e816-29c7-4297-833f-ffdf316d91dc",
+      "filename": "malicious_02.txt",
+      "document_id": "DOC-A502A6F5",
+      "expected": "malicious",
+      "predicted": "malicious",
+      "correct": true,
+      "decision": "quarantine",
+      "trust_score": 0.5925,
+      "entered_context": false,
+      "reason": "Hard quarantine: 2 high-severity injection pattern(s) matched",
+      "flags": [
+        "HIGH:\\bwhen\\s+summarizing\\b[\\s\\S]{0,150}\\balways\\s",
+        "HIGH:\\bdo\\s+not\\s+(?:mention|reveal)\\s+(?:that\\s+)"
+      ],
+      "signals": {
+        "provenance": 0.4,
+        "integrity": 0.85,
+        "validation": 0.7,
+        "content_risk": 0.5
+      },
+      "source": {
+        "found": true,
+        "source_type": "unknown",
+        "file_type": "txt",
+        "content_hash_sha256": "a502a6f55f3e2c8c98a20609c3d48a7de3c628bae8bed5b8fdd5303a7ebe4883",
+        "uploader_id": "sprint8-validation",
+        "uploaded_at": "2026-10-13T23:27:10.469143+00:00"
+      },
+      "processing_status": "processed"
+    },
+    {
+      "trace_id": "32d0988f-8d50-45e4-a659-d30ff3644501",
+      "run_id": "validation-48d1e816-29c7-4297-833f-ffdf316d91dc",
+      "filename": "malicious_03.txt",
+      "document_id": "DOC-CD872A9B",
+      "expected": "malicious",
+      "predicted": "malicious",
+      "correct": true,
+      "decision": "quarantine",
+      "trust_score": 0.6425,
+      "entered_context": false,
+      "reason": "Hard quarantine: 1 high-severity injection pattern(s) matched",
+      "flags": [
+        "HIGH:\\bbypass\\b"
+      ],
+      "signals": {
+        "provenance": 0.4,
+        "integrity": 0.85,
+        "validation": 0.7,
+        "content_risk": 0.25
+      },
+      "source": {
+        "found": true,
+        "source_type": "unknown",
+        "file_type": "txt",
+        "content_hash_sha256": "cd872a9b43f77d5d6add2924af9eeadd6861f44c489c4d0d77ec369d7daae424",
+        "uploader_id": "sprint8-validation",
+        "uploaded_at": "2026-10-13T23:27:10.469235+00:00"
+      },
+      "processing_status": "processed"
+    }
+  ]
+}
