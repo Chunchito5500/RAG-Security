@@ -98,6 +98,93 @@ def to_source_doc(doc_id, entry):
     }
 
 
+WEIGHTS = {"provenance": 0.35, "integrity": 0.25, "validation": 0.20, "content_risk": 0.20}
+ALLOW_THRESHOLD = 0.80
+QUARANTINE_THRESHOLD = 0.50
+
+
+def score_band(score):
+    if score is None:
+        return None
+    if score >= ALLOW_THRESHOLD:
+        return "allow"
+    if score >= QUARANTINE_THRESHOLD:
+        return "warn"
+    return "quarantine"
+
+
+def build_score_breakdown(tb):
+    """Show exactly how the trust score was computed and what decided the outcome."""
+    if tb is None:
+        return None
+    p, i, v, r = (_get(tb, k) for k in ("provenance", "integrity", "validation", "content_risk"))
+    if None in (p, i, v, r):
+        return None
+    contributions = {
+        "provenance": round(WEIGHTS["provenance"] * p, 4),
+        "integrity": round(WEIGHTS["integrity"] * i, 4),
+        "validation": round(WEIGHTS["validation"] * v, 4),
+        "content_risk": round(WEIGHTS["content_risk"] * (1 - r), 4),
+    }
+    score = _get(tb, "final_score")
+    band = score_band(score)
+    decision = _get(tb, "decision")
+    hard = bool(_get(tb, "hard_quarantine"))
+    if hard and band != "quarantine":
+        basis = "hard rule (score alone would have been '%s')" % band
+    elif decision == "quarantine":
+        basis = "score below quarantine threshold" if band == "quarantine" else "hard rule"
+    else:
+        basis = "score threshold"
+    return {
+        "formula": "0.35*P + 0.25*I + 0.20*V + 0.20*(1-R)",
+        "calculation": (
+            f"0.35*{p} + 0.25*{i} + 0.20*{v} + 0.20*(1-{r}) = "
+            f"{contributions['provenance']} + {contributions['integrity']} + "
+            f"{contributions['validation']} + {contributions['content_risk']} = {score}"
+        ),
+        "weighted_contributions": contributions,
+        "score_band": band,
+        "hard_rule_applied": hard,
+        "decision_basis": basis,
+        "thresholds": {"allow": f">= {ALLOW_THRESHOLD}",
+                       "warn": f"{QUARANTINE_THRESHOLD} - {ALLOW_THRESHOLD}",
+                       "quarantine": f"< {QUARANTINE_THRESHOLD}"},
+    }
+
+
+def parse_flags(flags):
+    """Split 'HIGH:pattern' strings into structured matches."""
+    parsed = []
+    for f in flags or []:
+        f = str(f)
+        if f == "INTEGRITY_FAIL":
+            parsed.append({"severity": "HIGH", "rule": "integrity check",
+                           "pattern": "content hash mismatch"})
+        elif ":" in f:
+            sev, pat = f.split(":", 1)
+            parsed.append({"severity": sev, "rule": "content risk pattern", "pattern": pat})
+        else:
+            parsed.append({"severity": "UNKNOWN", "rule": "other", "pattern": f})
+    return parsed
+
+
+def _content_preview(entry, length=160):
+    text = entry.get("text") if isinstance(entry, dict) else None
+    if not isinstance(text, str):
+        return None
+    flat = " ".join(text.split())
+    return flat[:length] + ("..." if len(flat) > length else "")
+
+
+def _content_stats(entry):
+    text = entry.get("text") if isinstance(entry, dict) else None
+    if not isinstance(text, str):
+        return None
+    return {"characters": len(text), "words": len(text.split()),
+            "lines": text.count("\n") + 1}
+
+
 def build_trace_record(result_row, entry, run_id, entered_context=None):
     """One audit record per validated file (benign and malicious)."""
     result_row = result_row or {}
@@ -125,6 +212,11 @@ def build_trace_record(result_row, entry, run_id, entered_context=None):
         "entered_context": entered_context,
         "reason": build_flag_reason(tb) if tb is not None else result_row.get("error"),
         "flags": list(_get(tb, "flags", []) or result_row.get("flags", []) or []),
+        "matched_patterns": parse_flags(
+            _get(tb, "flags", []) or result_row.get("flags", []) or []),
+        "score_breakdown": build_score_breakdown(tb),
+        "content_preview": _content_preview(entry),
+        "content_stats": _content_stats(entry),
         "signals": {
             "provenance": _get(tb, "provenance"),
             "integrity": _get(tb, "integrity"),
@@ -182,6 +274,10 @@ def trace_validation_run(results, doc_store, allowed_ids=None, query=None, run_i
             event["expected"] = row.get("expected")
             event["entered_context"] = entered
             event["trace_id"] = trace["trace_id"]
+            event["matched_patterns"] = trace["matched_patterns"]
+            event["score_breakdown"] = trace["score_breakdown"]
+            event["content_hash_sha256"] = trace["source"]["content_hash_sha256"]
+            event["detection_correct"] = trace["correct"]
             events.append(event)
 
     return traces, events
@@ -203,6 +299,54 @@ def summarize_traces(traces):
             if t["decision"] == "quarantine" and t["entered_context"]
         ],
         "errors": [t["filename"] for t in traces if t["processing_status"] != "processed"],
+        **_detection_metrics(traces),
+    }
+
+
+def _avg(values):
+    values = [v for v in values if isinstance(v, (int, float))]
+    return round(sum(values) / len(values), 4) if values else None
+
+
+def _detection_metrics(traces):
+    scored = [t for t in traces if t["predicted"] and t["expected"] in ("benign", "malicious")]
+    tp = sum(t["expected"] == "malicious" and t["predicted"] == "malicious" for t in scored)
+    tn = sum(t["expected"] == "benign" and t["predicted"] == "benign" for t in scored)
+    fp = sum(t["expected"] == "benign" and t["predicted"] == "malicious" for t in scored)
+    fn = sum(t["expected"] == "malicious" and t["predicted"] == "benign" for t in scored)
+
+    def pct(n, d):
+        return round(100 * n / d, 2) if d else None
+
+    decisions, patterns = {}, {}
+    for t in traces:
+        decisions[t["decision"] or "error"] = decisions.get(t["decision"] or "error", 0) + 1
+        for m in t.get("matched_patterns") or []:
+            patterns[m["pattern"]] = patterns.get(m["pattern"], 0) + 1
+
+    benign = [t for t in traces if t["expected"] == "benign"]
+    malicious = [t for t in traces if t["expected"] == "malicious"]
+    return {
+        "confusion_matrix": {"true_positives": tp, "true_negatives": tn,
+                             "false_positives": fp, "false_negatives": fn},
+        "accuracy_percent": pct(tp + tn, len(scored)),
+        "precision_percent": pct(tp, tp + fp),
+        "recall_percent": pct(tp, tp + fn),
+        "false_positive_rate_percent": pct(fp, fp + tn),
+        "decision_counts": decisions,
+        "hard_rule_quarantines": sum(
+            bool((t.get("score_breakdown") or {}).get("hard_rule_applied")) for t in traces),
+        "quarantined_only_by_hard_rule": [
+            t["filename"] for t in traces
+            if t["decision"] == "quarantine"
+            and (t.get("score_breakdown") or {}).get("score_band") not in (None, "quarantine")
+        ],
+        "average_trust_score": {
+            "benign": _avg(t["trust_score"] for t in benign),
+            "malicious": _avg(t["trust_score"] for t in malicious),
+        },
+        "pattern_match_counts": dict(sorted(patterns.items(), key=lambda kv: -kv[1])),
+        "misclassified": [t["filename"] for t in scored if t["correct"] is False],
     }
 
 

@@ -127,6 +127,35 @@ class EndToEndTests(unittest.TestCase):
         for e in self.events:
             self.assertIn(e["trace_id"], trace_ids)
 
+    def test_score_breakdown_matches_trust_score(self):
+        for t in self.payload["traces"]:
+            sb = t["score_breakdown"]
+            total = sum(sb["weighted_contributions"].values())
+            self.assertAlmostEqual(total, t["trust_score"], places=3)
+            self.assertIn("=", sb["calculation"])
+
+    def test_malicious_caught_by_hard_rule_is_explained(self):
+        for t in self.payload["traces"]:
+            if t["expected"] == "malicious":
+                self.assertTrue(t["score_breakdown"]["hard_rule_applied"])
+                self.assertIn("hard rule", t["score_breakdown"]["decision_basis"])
+                self.assertTrue(t["matched_patterns"])
+        self.assertEqual(len(self.payload["summary"]["quarantined_only_by_hard_rule"]), 3)
+
+    def test_detection_metrics(self):
+        s = self.payload["summary"]
+        self.assertEqual(s["confusion_matrix"]["true_positives"], 3)
+        self.assertEqual(s["confusion_matrix"]["false_positives"], 0)
+        self.assertEqual(s["accuracy_percent"], 100.0)
+        self.assertEqual(s["recall_percent"], 100.0)
+        self.assertTrue(s["pattern_match_counts"])
+
+    def test_report_text_contains_detail(self):
+        report = run_validation_trace.format_report(self.payload, self.events, self.docs)
+        for text in ("PER-DOCUMENT DETAIL", "Calculation", "Confusion matrix",
+                     "malicious_02.txt", "SHA-256", "RESULT: PASS"):
+            self.assertIn(text, report)
+
     def test_summary_and_files_written(self):
         s = self.payload["summary"]
         self.assertEqual(s["malicious_quarantined"], 3)
