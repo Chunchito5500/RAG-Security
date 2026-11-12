@@ -98,3 +98,13 @@ test('loading and connection errors remain explicit and offer retry', () => {
   assert.ok(html.includes('Cannot reach the backend.'));
   assert.ok(html.includes('Retry'));
 });
+
+
+test('semantic passages render page references and link their source document', () => {
+  const semantic = {...event, documents: [{...event.documents[0], reference:{page:3,chunk_index:2}, effectiveSimilarity:.65}]};
+  const html = render(RetrievalEventDetail, {event:semantic});
+  assert.ok(html.includes('Page 3'));
+  assert.ok(html.includes('Chunk 2'));
+  assert.ok(html.includes('/documents?document=DOC-WARN'));
+  assert.ok(html.includes('not an AI-generated answer'));
+});

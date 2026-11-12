@@ -1,4 +1,5 @@
 import type { RetrievalEvent } from "@/lib/retrieval/types";
+import Link from "next/link";
 import { documentTitle, formatTrustScore, isFlaggedDocument } from "@/lib/retrieval/selectors";
 import { eventCounts, eventTime, readableReason } from "@/lib/retrieval/presentation";
 import { DetectionDetails } from "./document-details";
@@ -17,6 +18,8 @@ export function RetrievalEventDetail({ event }: { event: RetrievalEvent }) {
       {passages.length ? <div className="divide-y divide-slate-200">{passages.map((d, index) => <details key={d.id} open={index === 0} className="py-3 first:pt-0">
         <summary className="text-sm font-semibold text-slate-800">{documentTitle(d)} <span className="ml-2"><StatusBadge status={d.status} /></span></summary>
         <p className="mt-2 break-all text-xs text-slate-500">{d.source?.name || "Source metadata not recorded"}</p>
+        {d.reference && <p className="mt-2 text-xs text-slate-600">Chunk {d.reference.chunk_index} · {d.reference.page ? `Page ${d.reference.page}` : `Lines ${d.reference.line_start}–${d.reference.line_end}`} · Trust {formatTrustScore(d.trustScore)} · Retrieval score {d.effectiveSimilarity?.toFixed(3) ?? "Not recorded"}</p>}
+        {d.documentId && <Link className="mt-2 inline-block text-xs underline" href={`/documents?document=${encodeURIComponent(d.documentId)}`}>View source document</Link>}
         <p className="mt-3 max-h-80 overflow-y-auto whitespace-pre-wrap break-words text-sm leading-7 text-slate-700">{d.excerpt}</p>
         {d.status === "flagged" && <p className="mt-3 text-xs text-amber-800">Warning: {readableReason(d.flagReason)}</p>}
       </details>)}</div> : <EmptyState>No trusted passages are available. {event.documents.some(d => d.decision === "allowed") ? "Source text was not recorded for these results." : "No retrieved source with available text was eligible."}</EmptyState>}

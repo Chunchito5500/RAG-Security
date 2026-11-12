@@ -5,3 +5,10 @@ validation_retrieval_logs.json
 uploads/
 flagged_events.json
 .env
+data/
+.model-cache/
+*.sqlite3
+*.sqlite3-journal
+.env.*
+!.env.example
+!.env.production.example

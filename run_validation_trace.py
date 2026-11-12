@@ -14,6 +14,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 from pathlib import Path
 
 from rag_sample_demo import (
@@ -46,6 +47,9 @@ def score_folder(documents_dir):
                 continue
             try:
                 text = read_document(path)
+                candidate_id = "DOC-" + hashlib.sha256(text.encode()).hexdigest()[:8].upper()
+                if candidate_id in seen:
+                    raise ValueError("Duplicate document content or document ID")
                 meta = ingestion.ingest(
                     text,
                     uploader_id="sprint8-validation",

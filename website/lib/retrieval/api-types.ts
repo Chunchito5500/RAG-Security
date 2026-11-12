@@ -10,6 +10,21 @@ export interface DocumentResult {
   flag_reason: string | null;
   quarantine_status: string | null;
   status?: string;
+  processing_status?: "queued" | "processing" | "processed" | "failed";
+  processing_error?: string | null;
+  uploaded_at?: string;
+  raw_sha256?: string;
+  text_sha256?: string | null;
+  policy_version?: string | null;
+  metadata?: { source_type: string; uploader_id: string; uploaded_at: string; sanitization_applied?: boolean };
+  chunks?: { chunk_id: string; reference: ChunkReference }[];
+}
+
+export interface ChunkReference {
+  page: number | null;
+  chunk_index: number;
+  line_start: number | null;
+  line_end: number | null;
 }
 
 export interface ApiRetrievedDocument extends DocumentResult {
@@ -18,6 +33,8 @@ export interface ApiRetrievedDocument extends DocumentResult {
   excerpt: string | null;
   similarity: number | null;
   effective_similarity: number | null;
+  chunk_id?: string;
+  reference?: ChunkReference;
 }
 
 export interface QueryResult {
@@ -40,6 +57,7 @@ export interface ProcessingError {
 }
 
 export interface FlaggedEvent {
+  event_type?: "ingestion" | "retrieval";
   event_id: string;
   high_severity_flag?: boolean;
   request_id: string | null;

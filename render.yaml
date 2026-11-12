@@ -1,0 +1,32 @@
+# Proposed deployment only. Creating this service requires owner approval.
+services:
+  - type: web
+    name: rag-security-api
+    runtime: python
+    plan: standard
+    buildCommand: >-
+      pip install --upgrade pip==26.3 &&
+      pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu &&
+      pip install -r requirements.txt &&
+      python embeddings.py
+    startCommand: sh scripts/start-backend.sh
+    healthCheckPath: /api/ready
+    disk:
+      name: rag-data
+      mountPath: /var/data
+      sizeGB: 5
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.2
+      - key: RAG_ENV
+        value: production
+      - key: RAG_DATA_DIR
+        value: /var/data/rag
+      - key: RAG_MODEL_CACHE
+        value: ./.model-cache
+      - key: RAG_MODEL_OFFLINE
+        value: "1"
+      - key: RAG_CORS_ORIGINS
+        sync: false
+      - key: RAG_ACCESS_CODE_HASH
+        sync: false

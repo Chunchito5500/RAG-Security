@@ -77,3 +77,35 @@ test("simultaneous reads share a request but refresh gets fresh backend data", a
   complete();
   await refreshed;
 });
+
+
+test("authenticated requests carry a session without exposing a configured secret", async (t) => {
+  const calls = [];
+  t.mock.method(globalThis, "fetch", async (url, options) => {
+    calls.push({url, options});
+    return new Response(JSON.stringify({data: url.endsWith("/api/session") && options.method === "POST" ? {token:"issued-token", expires_at: 2000000000} : []}));
+  });
+  await api.login("entered-code");
+  await api.documents();
+  assert.equal(calls[1].options.headers.Authorization, "Bearer issued-token");
+  await api.logout();
+  await api.documents();
+  assert.equal(calls[3].options.headers.Authorization, undefined);
+});
+
+test("malformed document and evaluation data fail explicitly", async (t) => {
+  t.mock.method(globalThis, "fetch", async () => new Response(JSON.stringify({data:{}})));
+  await assert.rejects(api.documents(), /Invalid document library/);
+  await assert.rejects(api.evaluation(), /Invalid evaluation/);
+  await assert.rejects(api.flaggedEvents(), /Invalid security event/);
+});
+
+test("chunk references survive adaptation while blocked text is discarded", () => {
+  const event=toRetrievalEvent({retrieval_event_id:"chunks",origin:"file_pipeline",retrieved_documents:[
+    {document_id:"doc",result_id:"chunk",reference:{page:2,chunk_index:3},trust_score:.7,security_status:"flagged",inclusion:"allowed",excerpt:"passage",effective_similarity:.6},
+    {document_id:"blocked",security_status:"blocked",inclusion:"excluded",excerpt:"MUST_NOT_RETURN"}
+  ]});
+  assert.equal(event.documents[0].reference.page,2);
+  assert.equal(event.documents[0].effectiveSimilarity,.6);
+  assert.equal(event.documents[1].excerpt,null);
+});

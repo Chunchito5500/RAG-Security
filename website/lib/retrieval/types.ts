@@ -25,6 +25,8 @@ export interface RetrievedDocument {
   decision: RetrievalDecision;
   quarantineStatus?: string | null;
   similarity?: number | null;
+  effectiveSimilarity?: number | null;
+  reference?: { page: number | null; chunk_index: number; line_start: number | null; line_end: number | null };
 }
 
 export interface RetrievalAnswer {

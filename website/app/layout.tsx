@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppShell } from "@/components/app-shell";
+import { WorkspaceAccess } from "@/components/workspace-access";
 
 export const metadata: Metadata = {
   title: { default: "Retrieval Shield", template: "%s | Retrieval Shield" },
@@ -15,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body><AppShell>{children}</AppShell></body>
+      <body><WorkspaceAccess><AppShell>{children}</AppShell></WorkspaceAccess></body>
     </html>
   );
 }

@@ -6,12 +6,14 @@ import { useSearchParams } from "next/navigation";
 import { api } from "@/lib/retrieval/api-source";
 import { useApi } from "@/lib/retrieval/use-api";
 import { isFlaggedEvent } from "@/lib/retrieval/selectors";
+import { eventTime, readableReason } from "@/lib/retrieval/presentation";
 import { ActivityTable } from "./activity-table";
 import { RetrievalEventDetail } from "./retrieval-event-detail";
 import { buttonClass, EmptyState, LoadState, Panel, primaryButtonClass } from "./retrieval-ui";
 
 export function ActivityWorkspace() {
   const resource = useApi(api.listEvents);
+  const security = useApi(api.flaggedEvents);
   const [flagged, setFlagged] = useState(false);
   const selectedId = useSearchParams().get("event");
   const selected = resource.data?.find(event => event.id === selectedId);
@@ -25,5 +27,9 @@ export function ActivityWorkspace() {
       </>)}
     </Panel>
     {!resource.loading && !resource.error && selected && <RetrievalEventDetail event={selected} />}
+    {!selectedId && <Panel title="Security activity" description="Recorded ingestion and retrieval decisions.">
+      <LoadState {...security} />
+      {!security.loading && !security.error && (security.data?.data.length ? <ul className="max-h-96 divide-y overflow-y-auto">{security.data.data.map(event => <li key={event.event_id} className="py-3 text-sm"><Link className="underline" href={`/security?tab=events&record=${encodeURIComponent(event.event_id)}`}>{event.event_type || "Security"} · {event.document_id}</Link><p className="mt-1 text-xs text-slate-500">{eventTime(event.timestamp)} · {readableReason(event.flag_reason)}</p></li>)}</ul> : <EmptyState>No security events yet.</EmptyState>)}
+    </Panel>}
   </>;
 }

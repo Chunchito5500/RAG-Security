@@ -23,11 +23,11 @@ export function SearchWorkspace() {
     finally { setRunning(false); }
   }
   return <>
-    <Panel title="Search your documents" description="Retrieve source passages and inspect the security decisions behind each result.">
+    <Panel title="Search your documents" description="Search by meaning and inspect source chunks, references, and security decisions.">
       <form onSubmit={e => { e.preventDefault(); void runQuery(); }} className="space-y-4">
         <label className="block text-sm font-medium text-slate-700" htmlFor="query">Question</label>
         <textarea id="query" maxLength={2000} rows={3} disabled={running} value={query} onChange={e => { setQuery(e.target.value); setError(""); }} placeholder="What information is contained in these documents?" className={inputClass} aria-invalid={!!error} aria-describedby={error ? "query-error" : undefined} />
-        <div className="flex flex-wrap items-end gap-3"><label className="text-xs font-medium text-slate-600">Candidate retrieval count<select className={`${inputClass} mt-1 min-w-32 pr-9`} value={topK} disabled={running} onChange={e => setTopK(Number(e.target.value))}>{[3, 5, 10, 20, 50].map(n => <option key={n}>{n}</option>)}</select></label><button type="submit" disabled={running} className={primaryButtonClass}>{running ? "Retrieving…" : "Run Retrieval"}</button></div>
+        <div className="flex flex-wrap items-end gap-3"><label className="text-xs font-medium text-slate-600">Maximum eligible chunks<select className={`${inputClass} mt-1 min-w-32 pr-9`} value={topK} disabled={running} onChange={e => setTopK(Number(e.target.value))}>{[3, 5, 10, 20, 50].map(n => <option key={n}>{n}</option>)}</select></label><button type="submit" disabled={running} className={primaryButtonClass}>{running ? "Retrieving…" : "Run Retrieval"}</button></div>
         {error && <p id="query-error" role="alert" className="text-sm text-red-700">{error}</p>}
       </form>
     </Panel>

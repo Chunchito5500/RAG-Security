@@ -1,3 +1,4 @@
+import hashlib
 
 import json
 from pathlib import Path
@@ -45,6 +46,9 @@ for category in ("benign", "malicious"):
 
         try:
             text = read_document(path)
+            candidate_id = "DOC-" + hashlib.sha256(text.encode()).hexdigest()[:8].upper()
+            if candidate_id in seen_ids:
+                raise ValueError("Duplicate document content or document ID")
 
             # Use the same provenance for both categories.
             # Expected labels must not determine trust scores.
