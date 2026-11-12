@@ -1,6 +1,7 @@
 import json
 import time
 import uuid
+from json_storage import append_records
 
 FLAGGED_EVENTS_FILE = "flagged_events.json"
 
@@ -81,9 +82,7 @@ def load_events(path=FLAGGED_EVENTS_FILE):
 
 
 def save_events(events, path=FLAGGED_EVENTS_FILE):
-    existing = load_events(path)
-    with open(path, "w") as f:
-        json.dump(existing + events, f, indent=2)
+    append_records(path, events)
 
 
 if __name__ == "__main__":

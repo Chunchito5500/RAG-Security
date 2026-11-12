@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint app components lib --ext .ts,.tsx",
     "typecheck": "tsc --noEmit --incremental false",
-    "test": "node --test scripts/retrieval.test.cjs"
+    "test": "node --test scripts/*.test.cjs"
   },
   "dependencies": {
     "next": "^15.0.0",

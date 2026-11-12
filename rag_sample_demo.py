@@ -10,6 +10,7 @@ from pathlib import Path
 from io import BytesIO
 
 import numpy as np
+from json_storage import append_records
 
 
 
@@ -332,14 +333,7 @@ class SafeRetrievalLayer:
         return allowed_docs
 
     def export_logs(self):
-        existing = []
-        try:
-            with open(self.log_path) as f:
-                existing = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            pass
-        with open(self.log_path, "w") as f:
-            json.dump(existing + self.logs, f, indent=2)
+        append_records(self.log_path, self.logs)
         print(f"\n[SAVED] {len(self.logs)} log entries → {self.log_path}")
 
 

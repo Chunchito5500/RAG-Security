@@ -2,3 +2,6 @@
 
 __pycache__/
 validation_retrieval_logs.json
+uploads/
+flagged_events.json
+.env

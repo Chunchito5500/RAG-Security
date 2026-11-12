@@ -23,6 +23,8 @@ export interface RetrievedDocument {
   flagReason: FlagReason;
   /** Eligibility for answer context; being allowed does not imply being cited. */
   decision: RetrievalDecision;
+  quarantineStatus?: string | null;
+  similarity?: number | null;
 }
 
 export interface RetrievalAnswer {
@@ -36,14 +38,14 @@ export interface RetrievalEvent {
   id: string;
   query: string;
   occurredAt: string;
-  mode: RetrievalMode;
+  mode: RetrievalMode | "security" | "legacy";
   origin: "demo" | "backend";
   scenarioLabel?: string;
   documents: RetrievedDocument[];
   answer: RetrievalAnswer;
 }
 
-/** Frontend read boundary. A future adapter maps backend data to these types. */
+/** Frontend read boundary shared by the API adapter and retained demo tests. */
 export interface RetrievalDataSource {
   listEvents(): Promise<RetrievalEvent[]>;
 }

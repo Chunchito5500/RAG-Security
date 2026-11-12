@@ -220,5 +220,63 @@
         "filtered_out": false
       }
     ]
+  },
+  {
+    "id": "bce64cf3-d1fa-4bd2-ac5c-0d273619aad8",
+    "time": "2026-10-13 23:50:42",
+    "query": "What information is contained in these docs",
+    "results": [
+      {
+        "id": "DOC-7D2EB732",
+        "similarity": 0.037,
+        "effective_similarity": 0.037,
+        "trust": 0.7025,
+        "decision": "quarantine",
+        "flagged": true,
+        "filename": "malicious_02.pdf",
+        "source": "documents/malicious/malicious_02.pdf",
+        "flag_reason": "HIGH:(developer|system) (message|prompt)",
+        "quarantine_status": "flagged",
+        "excerpt": null,
+        "trust_score": 0.7025,
+        "status": "QUARANTINE",
+        "high_severity_flag": true
+      },
+      {
+        "id": "DOC-A92CDEE6",
+        "similarity": 0.037,
+        "effective_similarity": 0.0313,
+        "trust": 0.6925,
+        "decision": "warn",
+        "flagged": true,
+        "filename": "test.txt",
+        "source": "uploads/4af184ee-9b34-43c0-8855-8e6a322c7a8c/test.txt",
+        "flag_reason": "Moderate trust score",
+        "quarantine_status": "none",
+        "excerpt": "The university library is open Monday through Friday.\nStudents can access research databases through the library portal.\nThe library provides study rooms and academic support resources.",
+        "trust_score": 0.6925,
+        "status": "WARN",
+        "high_severity_flag": false
+      },
+      {
+        "id": "DOC-580D5017",
+        "similarity": 0.0364,
+        "effective_similarity": 0.0364,
+        "trust": 0.7025,
+        "decision": "quarantine",
+        "flagged": true,
+        "filename": "malicious_04.pdf",
+        "source": "documents/malicious/malicious_04.pdf",
+        "flag_reason": "HIGH:\\bbypass\\b",
+        "quarantine_status": "flagged",
+        "excerpt": null,
+        "trust_score": 0.7025,
+        "status": "QUARANTINE",
+        "high_severity_flag": true
+      }
+    ],
+    "pipeline": "file_pipeline",
+    "top_k": 3,
+    "timestamp": "2026-10-13T23:50:42Z"
   }
 ]

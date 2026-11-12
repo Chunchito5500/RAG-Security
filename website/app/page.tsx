@@ -1,9 +1,5 @@
-import { RagShieldDashboard } from "@/components/rag-shield-dashboard";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-transparent">
-      <RagShieldDashboard />
-    </main>
-  );
+  redirect("/dashboard");
 }

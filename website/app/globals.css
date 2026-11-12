@@ -4,7 +4,7 @@
 
 :root {
   color-scheme: light;
-  background-color: #f3f4f6;
+  background-color: #f6f8fb;
 }
 
 * {
@@ -18,17 +18,17 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: #f3f4f6;
+  background: #f6f8fb;
   color: #111827;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Avenir Next", "Segoe UI", Arial, sans-serif;
 }
 
 textarea {
   resize: vertical;
 }
 
-:where(a, button, select, textarea):focus-visible {
-  outline: 2px solid #8c1d40;
+:where(a, button, select, textarea, input, summary, [tabindex]):focus-visible {
+  outline: 2px solid #0369a1;
   outline-offset: 3px;
 }
 
@@ -49,3 +49,11 @@ select {
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
 }
+
+.table-scroll { width: 100%; overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8125rem; }
+.data-table th { padding: 0.75rem; color: #64748b; background: #f8fafc; font-size: 0.6875rem; font-weight: 600; white-space: nowrap; }
+.data-table td { padding: 0.875rem 0.75rem; border-top: 1px solid #e2e8f0; vertical-align: top; color: #334155; }
+.data-table tbody tr:hover { background: #f8fafc; }
+.data-table .name-cell { min-width: 150px; max-width: 300px; overflow-wrap: anywhere; }
+summary { cursor: pointer; }

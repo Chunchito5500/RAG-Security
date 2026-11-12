@@ -9,7 +9,7 @@ export function formatTrustScore(score: TrustScore): string {
 }
 
 export function documentTitle(document: RetrievedDocument): string {
-  return document.title?.trim() || "Untitled document";
+  return document.title?.trim() || document.documentId?.trim() || "Untitled document";
 }
 
 export function isFlaggedDocument(document: RetrievedDocument): boolean {
